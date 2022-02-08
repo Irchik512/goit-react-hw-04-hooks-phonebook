@@ -5,18 +5,7 @@ import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import Notification from './Notification/Notification';
-
-const useLocalStorage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
-  }, [key, state]);
-
-  return [state, setState];
-};
+import useLocalStorage from 'hooks/useLocalStorage';
 
 export default function App() {
   const [contacts, setContacts] = useLocalStorage('contacts', []);
