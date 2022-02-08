@@ -6,8 +6,20 @@ import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import Notification from './Notification/Notification';
 
+const useLocalStorage = (key, defaultValue) => {
+  const [state, setState] = useState(() => {
+    return JSON.parse(localStorage.getItem(key)) ?? defaultValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(state));
+  }, [key, state]);
+
+  return [state, setState];
+};
+
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useLocalStorage('contacts', []);
   const [filter, setFilter] = useState('');
 
   const formSubmitHandler = (name, number) => {
@@ -36,19 +48,6 @@ export default function App() {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
-
-  useEffect(() => {
-    const savedContact = JSON.parse(localStorage.getItem('contacts'));
-    if (savedContact) {
-      setContacts(savedContact);
-    } else {
-      return;
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   return (
     <>
